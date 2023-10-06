@@ -10,7 +10,32 @@
     </body>
     <head>
         <script type="application/javascript">
-            // 이곳에 코드를 작성하십시오.
+            (async () => {
+         // 파일 목록 요청
+         const response = await fetch('/api/v1/rest/aws/list');
+         const fileNames = await response.json();
+
+         // 파일 목록을 화면에 표시할 ul 요소 선택
+         const fileListContainer = document.getElementById("file_list");
+
+         // 각 파일에 대하여 화면에 표시
+         for (let fileName of fileNames) {
+             // li 요소 생성
+             let li = document.createElement("li");
+             // 파일 이름 텍스트 노드 생성 및 추가
+             let textNode = document.createTextNode(fileName + " ");
+             li.appendChild(textNode);
+
+             // 다운로드 링크 생성
+             let downloadLink = document.createElement("a");
+             downloadLink.href = `/api/v1/rest/aws/download?fileName=${encodeURIComponent(fileName)}`;
+             downloadLink.textContent = "Download";
+             li.appendChild(downloadLink);
+
+             // 생성된 li 요소를 ul 요소에 추가
+             fileListContainer.appendChild(li);
+         }
+     })()
         </script>
     </head>
 </html>
